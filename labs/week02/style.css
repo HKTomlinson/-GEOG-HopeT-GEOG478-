@@ -1,0 +1,29 @@
+body {
+    background: #EEE;
+    margin: 0;
+    padding: 0;
+  }
+h1 {
+    font-size: 2em;
+    font-family: 'Times New Roman', Times, serif;
+    color:maroon;
+    margin: 0;
+    padding: 0.5em;
+    text-align: center;
+  }
+p {
+    font-size: 1.2em;
+    font-family: 'Trebuchet MS';
+    color: #333;
+    margin: 0;
+    padding: 0.5em;
+    text-align: center;
+  }
+h2 {
+    font-size: 1.5em;
+    font-family: 'Times New Roman', Times, serif;
+    color:olivedrab;
+    margin: 0;
+    padding: 0.5em;
+  }
+ 
