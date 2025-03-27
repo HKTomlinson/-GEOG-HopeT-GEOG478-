@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>College Station Weekly Temperature Forecast</title>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <style>
+        #chart {
+            font: 10px sans-serif;
+            background-color: steelblue;
+            text-align: right;
+            color: white;
+        }
+        svg {
+            display: block;
+            margin: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1 style="text-align: center;">College Station Weekly Temperature Forecast</h1>
+    <div id="chart"></div>
+    <svg width="500" height="450"></svg> <!-- Add this SVG element for the axes chart -->
+
+    <script>
+        // Temperature data for x and y axes
+        const temperatureData = [
+            { day: "Sat", high: 82, low: 67 },
+            { day: "Sun", high: 81, low: 59 },
+            { day: "Mon", high: 81, low: 50 },
+            { day: "Tue", high: 70, low: 47 },
+            { day: "Wed", high: 77, low: 51 },
+            { day: "Thu", high: 78, low: 60 },
+            { day: "Fri", high: 79, low: 66 },
+            { day: "Sat", high: 80, low: 66 }
+        ];
+
+        // Set up the SVG canvas
+        const svg = d3.select("svg");
+        const margin = { top: 20, right: 30, bottom: 50, left: 50 };
+        const width = +svg.attr("width") - margin.left - margin.right;
+        const height = +svg.attr("height") - margin.top - margin.bottom;
+        const chartArea = svg.append("g")
+            .attr("transform", `translate(${margin.left},${margin.top})`);
+
+        // Create x and y scales
+        const xScale = d3.scalePoint()
+            .domain(temperatureData.map(d => d.day)) // Days of the week
+            .range([0, width]); // Pixel range for x-axis
+
+        const yScale = d3.scaleLinear()
+            .domain([40, 90]) // Temperature range (min and max)
+            .range([height, 0]); // Pixel range for y-axis (reversed for SVG coordinates)
+
+        // Create and append x-axis
+        const xAxis = d3.axisBottom(xScale);
+        chartArea.append("g")
+            .attr("transform", `translate(0,${height})`) // Position x-axis at the bottom
+            .call(xAxis);
+
+        // Create and append y-axis
+        const yAxis = d3.axisLeft(yScale);
+        chartArea.append("g")
+            .call(yAxis);
+
+        // Create line generator for high temperatures
+        const lineHigh = d3.line()
+            .x(d => xScale(d.day)) // Map day to x position
+            .y(d => yScale(d.high)); // Map high temperature to y position
+
+        // Create line generator for low temperatures
+        const lineLow = d3.line()
+            .x(d => xScale(d.day)) // Map day to x position
+            .y(d => yScale(d.low)); // Map low temperature to y position
+
+        // Add high temperature line
+        chartArea.append("path")
+            .datum(temperatureData)
+            .attr("fill", "none")
+            .attr("stroke", "red")
+            .attr("stroke-width", 2)
+            .attr("d", lineHigh);
+
+        // Add low temperature line
+        chartArea.append("path")
+            .datum(temperatureData)
+            .attr("fill", "none")
+            .attr("stroke", "blue")
+            .attr("stroke-width", 2)
+            .attr("d", lineLow);
+
+        // Add labels to the lines
+        chartArea.append("text")
+            .attr("x", width - 60)
+            .attr("y", yScale(temperatureData[temperatureData.length - 1].high) - 10)
+            .attr("fill", "red")
+            .text("High");
+
+        chartArea.append("text")
+            .attr("x", width - 60)
+            .attr("y", yScale(temperatureData[temperatureData.length - 1].low) + 10)
+            .attr("fill", "blue")
+            .text("Low");
+    </script>
+</body>
+</html>
