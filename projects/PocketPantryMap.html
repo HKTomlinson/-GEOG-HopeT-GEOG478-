@@ -106,7 +106,8 @@
     ];
     // Adding markers and popups for Pocket Pantries
     AllStudents.forEach(function(pantry) {
-        L.marker(pantry.coords).addTo(map)
+        L.marker(pantry.coords, 
+            {color: 'red'}).addTo(map)
             .bindPopup(`<b>${pantry.name}</b><br>${pantry.description}`);
     });
 
@@ -221,6 +222,24 @@
         L.marker(pantry.coords).addTo(map)
             .bindPopup(`<b>${pantry.name}</b><br>${pantry.description}`);
     });
+
+    function onLocationFound(e) {
+		var radius = e.accuracy / 10;
+
+		L.marker(e.latlng).addTo(map)
+			.bindPopup("You are within " + radius + " meters from this point").openPopup();
+
+		L.circle(e.latlng, radius).addTo(map);
+	}
+
+	function onLocationError(e) {
+		alert(e.message);
+	}
+
+	map.on('locationfound', onLocationFound);
+	map.on('locationerror', onLocationError);
+
+	map.locate({setView: true, maxZoom: 16});
     </script>
 
 </body>
